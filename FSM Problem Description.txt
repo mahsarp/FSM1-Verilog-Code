@@ -1,0 +1,52 @@
+module top_module(
+    input clk,
+    input areset,    // Asynchronous reset to state B
+    input in,
+    output out);//  
+   
+    parameter A=0, B=1; //state encoding 
+    reg state, next_state;
+
+    always @(*) begin
+        // State transition logic
+       next_state=state;
+        case(state) 
+        B: begin
+           if(in)
+           
+            next_state=B;
+          
+           else 
+            next_state=A;
+               
+            
+       end
+       A: begin
+           if(in) begin
+                 next_state=A;
+                
+                   end
+           else 
+               
+                next_state=B;
+                 
+       end   
+   endcase
+    end//always
+
+    always @(posedge clk, posedge areset) begin
+        // State flip-flops with asynchronous reset
+        if( areset)
+            begin
+        state=B;
+        
+            end
+        else
+          state= next_state;
+      
+    end
+
+    // Output logic
+    assign out = (state ==A)? 1'b0: 1'b1 ;
+
+endmodule
